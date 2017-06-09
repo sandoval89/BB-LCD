@@ -39,6 +39,17 @@ class LCD {
 
 int main() {
 
+	LCD *screen = new LCD();
+	string input_str;
+	printf("Enter string: ");
+	while(getline(cin,input_str)){
+		if(input_str.compare("!exit") == 0)
+			break;
+		screen->clear();
+		screen->write(input_str);
+		printf("Enter string: ");
+	}
+	delete screen;
 	return 0;
 }
 
@@ -47,6 +58,7 @@ LCD::LCD() {
 }
 
 LCD::~LCD() {
+	clear();
 	fclose(clock_gpio);
 	fclose(latch_gpio);
 	fclose(serial_gpio);
@@ -130,8 +142,8 @@ void LCD::writeString(string character_string) {
 	int value_array[8];
 	for(int i = 0; i < character_string.length(); i++) {
         value_string = getLookupValue(character_string.substr(i,1));
-		for(int j = 0; j < value_string.length(); i++) {
-			bit_string = value_string.substr(i,1);
+		for(int j = 0; j < value_string.length(); j++) {
+			bit_string = value_string.substr(j,1);
 			if(bit_string.compare("0") == 0)
 				value_array[j] = 0;
 			else
